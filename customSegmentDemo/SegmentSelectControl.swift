@@ -12,8 +12,10 @@ import SwiftHEXColors
 class SegmentSelectButton : UIButton {
     override var highlighted: Bool {
         didSet {
-            backgroundColor = highlighted ? UIColor(hex: 0xF55F5F) : UIColor.whiteColor()
-            layer.borderColor = highlighted ? UIColor(hex: 0xF55F5F)?.CGColor : UIColor(hex: 0xD9D9D9)?.CGColor
+            if highlighted {
+                backgroundColor = UIColor(hex: 0xF55F5F)
+                layer.borderColor = UIColor(hex: 0xF55F5F)?.CGColor
+            }
         }
     }
     
@@ -55,14 +57,36 @@ class SegmentSelectControl: UIControl {
                 let aBtn = SegmentSelectButton(frame: CGRect(x: 10 + posX, y: 10, width: btnWidth, height: 24))
                 aBtn.setTitle(aTitle, forState: .Normal)
                 self.addSubview(aBtn)
+                
+                buttons.append(aBtn)
+                aBtn.addTarget(self, action: #selector(touchBtn(_:)), forControlEvents: .TouchUpInside)
             }
         }
     }
     
     var buttons = [UIButton]()
     
+    var selectIndex = 0
+    
+    func touchBtn(sender: UIButton) {
+        for aBtn in buttons {
+            aBtn.selected = false
+        }
+        
+        sender.selected = true
+        
+        selectIndex = buttons.indexOf(sender) ?? 0
+        
+        self.sendActionsForControlEvents(.ValueChanged)
+    }
+   
     override init(frame: CGRect) {
         super.init(frame: frame)
+        
+    }
+    
+    func setupFirstBtn() {
+        buttons.first?.selected = true
     }
     
     required init?(coder aDecoder: NSCoder) {

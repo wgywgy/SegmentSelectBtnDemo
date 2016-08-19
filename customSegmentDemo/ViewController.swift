@@ -17,16 +17,15 @@ class ViewController: UIViewController {
         let screenWidth = screenSize.width
         
         segControl = SegmentSelectControl(frame: CGRect(x: 0, y: 54, width: screenWidth, height: 34))
-        segControl?.backgroundColor = UIColor.yellowColor()
         segControl?.titles = ["全部", "热门", "卫视", "央视", "特色", "综合"]
         self.view.addSubview(segControl!)
+        
+        segControl?.addTarget(self, action: #selector(segmentValueChanged), forControlEvents: .ValueChanged)
+        segControl?.setupFirstBtn()
     }
 
-    override func didReceiveMemoryWarning() {
-        super.didReceiveMemoryWarning()
-        // Dispose of any resources that can be recreated.
+    func segmentValueChanged() {
+        print("ind: \(segControl?.selectIndex) ")
     }
-
-
 }
 
